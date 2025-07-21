@@ -1,21 +1,25 @@
-import { Box, Container } from '@mui/material'
-import React from 'react'
-import Navbar from './Navbar'
-import { Outlet } from 'react-router-dom'
-import Sidebar from './Sidebar'
+import { Box } from "@mui/material";
+import Navbar from "./Navbar";
+import Sidebar from "./Sidebar";
+import { Outlet } from "react-router-dom";
 
 const Layout = () => {
   return (
-    <Container maxWidth="xxl">
+    <Box sx={{ display: "flex", height: "100vh" }}>
+     
       
-        <Navbar/>
-        <Container maxWidth="xxl">
-            <Box sx={{display: "flex", flexDirection: "row", width: "100%"}}>
-              <Sidebar/>  <Outlet/>
-            </Box>
-        </Container>
-    </Container>
-  )
-}
+        <Sidebar />
+      
 
-export default Layout 
+      
+      <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+        <Navbar />
+        <Box sx={{ p: 3 }}>
+          <Outlet />
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+
+export default Layout;
