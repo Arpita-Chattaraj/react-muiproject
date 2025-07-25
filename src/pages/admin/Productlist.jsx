@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography, Card, CardContent, Grid } from "@mui/material";
 
-// Sample data (you can later fetch this from API or props)
+
 const productData = [
   {
     name: "Product A",
