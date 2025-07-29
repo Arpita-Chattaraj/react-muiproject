@@ -3,7 +3,7 @@ import Login from "../pages/Login";
 import SignUp from "../pages/SignUp";
 import Layout from "../components/Layout";
 import Productlist from "../pages/admin/Productlist";
-import Users from "../pages/admin/Users";
+
 import Productadd from "../pages/admin/Productadd";
 
 

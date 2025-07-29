@@ -1,52 +1,66 @@
-import React from "react";
-import { Box, Typography, Card, CardContent, Grid } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import {
+  Table, TableBody, TableCell, TableContainer,
+  TableHead, TableRow, Paper
+} from "@mui/material";
+import axios from "axios";
 
-
-const productData = [
-  {
-    name: "Product A",
-    price: "₹499",
-    description: "This is a description for Product A.",
-  },
-  {
-    name: "Product B",
-    price: "₹899",
-    description: "This is a description for Product B.",
-  },
-  {
-    name: "Product C",
-    price: "₹1299",
-    description: "This is a description for Product C.",
-  },
+// Simple product data
+const rows = [
+  { name: "Cake", fat: 5, carbs: 30, protein: 3 },
+  { name: "Ice Cream", fat: 10, carbs: 40, protein: 4 },
+  { name: "Cookie", fat: 8, carbs: 25, protein: 2 },
 ];
 
 const Productlist = () => {
-  return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        Product List
-      </Typography>
+  const[productlist,setProductlist]=useState([])
+  useEffect(()=>{ 
+    try{
+      axios.get("https://jsonplaceholder.typicode.com/posts")
+      .then((Response)=>{
+        // console.log(Response);
+        setProductlist(Response.data)
+        
+      })
+      .catch((error)=>{
+        console.log(error);
+        alert(error.message)
+        
 
-      <Grid container spacing={2}>
-        {productData.map((product, index) => (
-          <Grid item xs={12} md={6} lg={4} key={index}>
-            <Card sx={{ height: "100%" }}>
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  {product.name}
-                </Typography>
-                <Typography variant="subtitle1" color="text.secondary">
-                  Price: {product.price}
-                </Typography>
-                <Typography variant="body2" mt={1}>
-                  {product.description}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
+      }
+
+      )
+      
+
+    }catch(error){
+      console.log(error);
+      alert(error.message)
+      
+    }
+  },[])
+  console.log("productlist", productlist);
+  
+  return (
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>ID</TableCell>
+            <TableCell colSpan={3}>Title</TableCell>
+            <TableCell colSpan={3}>Body</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {productlist.map((item) => (
+            <TableRow key={item.id}>
+              <TableCell>{item.id}</TableCell>
+              <TableCell colSpan={3}>{item.title}</TableCell>
+              <TableCell colSpan={3}>{item.body}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 

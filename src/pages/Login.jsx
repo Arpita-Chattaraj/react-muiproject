@@ -1,32 +1,54 @@
-import { Box, Typography, Button } from "@mui/material";
 import React, { useState } from "react";
 
-const Signup = () => {
+import {
+  Box,
+  Paper,
+  TextField,
+  Button,
+  Typography,
+  Link
+} from "@mui/material";
+import {   useNavigate } from "react-router-dom";
+
+const Login = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: "",
+    userId: Math.random(),
     email: "",
     password: "",
   });
+  const user = JSON.parse(localStorage.getItem("user"));
+if (user) {
+  console.log("User name:", user.name);
+}
 
-  const [error, setError] = useState({});
+  const [errors, setErrors] = useState({});
 
-  const Handlechange = (e) => {
+  const SignupData = JSON.parse(localStorage.getItem("signupData")) || {}
+  const email = SignupData.email 
+  const password= SignupData.password
+  
+  console.log("Email",email);
+  console.log("password",password);
+  
+
+  const handleChange = (e) => {
     const { name, value } = e.target;
+
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
-    setError((prev) => ({
+
+    setErrors((prev) => ({
       ...prev,
       [name]: "",
     }));
   };
 
   const validate = () => {
-    let newErrors = {};
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
-    }
+    const newErrors = {};
+
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
     } else if (!formData.email.includes("@") || !formData.email.includes(".")) {
@@ -35,92 +57,101 @@ const Signup = () => {
 
     if (!formData.password.trim()) {
       newErrors.password = "Password is required";
-    } else if (formData.password.length !== 7) {
-      newErrors.password = "Password must be 7 characters";
+    } else if (formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
     }
 
-    setError(newErrors);
+    setErrors(newErrors);
+    console.log("Validation errors:", newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const Handlesubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (validate()) {
-      console.log(formData);
-      alert("Form submitted successfully!");
-      setFormData({
-        name: "",
-        email: "",
-        password: "",
-      });
-    } else {
-      alert("Please fix the errors");
-    }
-  };
+ if (validate()) {
+  if (email) {
+    if (formData.email === email) {
+      if(formData.password === password){
+        localStorage.setItem("loginData", JSON.stringify(formData));
+        console.log("User ID:", formData.userId);
 
+      alert("Login successful!");
+      navigate("/admin/list");
+
+      }else{
+        alert("password does not match")
+      }
+      
+    } else {
+      alert("Email doesn't match");
+    }
+  } else {
+    alert("First Signup");
+    navigate("/signup");
+  }
+} else {
+  alert("Please fix the errors.");
+}
+  }
   return (
     <Box
       sx={{
-        maxWidth: 400,
-        mx: "auto",
-        mt: 5,
-        p: 4,
-        boxShadow: 3,
-        borderRadius: 2,
-        backgroundColor: "#a44f4fff",
+        height: "100vh",
+        bgcolor: "#f0f0f0",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
-      <Typography variant="h5" align="center" gutterBottom>
-        Login Form
-      </Typography>
+      <Paper elevation={3} sx={{ padding: 4, width: 300 }}>
+        <Typography variant="h5" gutterBottom>
+          Login
+        </Typography>
 
-      <form onSubmit={Handlesubmit}>
-        <div>
-          <label>Enter your name</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            placeholder="user name"
-            onChange={Handlechange}
-          />
-          {error.name && <p style={{ color: "red" }}>{error.name}</p>}
-        </div>
-
-        <br />
-
-        <div>
-          <label>Enter your email</label>
-          <input
-            type="text"
+        <form onSubmit={handleSubmit}>
+          <TextField
+            fullWidth
+            label="Email"
             name="email"
+            margin="normal"
             value={formData.email}
-            placeholder="user email"
-            onChange={Handlechange}
+            onChange={handleChange}
+            error={!!errors.email}
+            helperText={errors.email}
           />
-          {error.email && <p style={{ color: "red" }}>{error.email}</p>}
-        </div>
 
-        <br />
-
-        <div>
-          <label>Password</label>
-          <input
+          <TextField
+            fullWidth
+            label="Password"
             type="password"
             name="password"
-            placeholder="enter your password"
+            margin="normal"
             value={formData.password}
-            onChange={Handlechange}
-          />
-          {error.password && <p style={{ color: "red" }}>{error.password}</p>}
-        </div>
+            onChange={handleChange}
+            error={!!errors.password}
+            helperText={errors.password}
 
-        <Button variant="contained" color="submit" type="submit">
-          submit
-        </Button>
-      </form>
+            
+          />
+
+          <Button
+            fullWidth
+            type="submit"
+            variant="contained"
+            sx={{ mt: 2 }}
+          >
+            Login
+          </Button>
+        </form>
+        <Typography variant="body2" sx={{ mt: 2 }}>
+          Don't have an account?{" "}
+          <Link href="/signup" underline="hover">
+            Sign up
+          </Link>
+        </Typography>
+      </Paper>
     </Box>
   );
 };
 
-export default Signup;
+export default Login;

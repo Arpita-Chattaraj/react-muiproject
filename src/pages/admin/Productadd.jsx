@@ -8,23 +8,67 @@ const Productadd = () => {
     description: "",
   });
 
+  const [error, setError] = useState({});
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
+    setError((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
+  };
+
+  const validate = () => {
+    let newErrors = {};
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    }
+    if (!formData.price.trim()) {
+      newErrors.price = "Price is required";
+    } else if (isNaN(formData.price)) {
+      newErrors.price = "Invalid price";
+    }
+
+    if (!formData.description.trim()) {
+      newErrors.description = "Description is required";
+    } else if (formData.description.length < 3) {
+      newErrors.description = "Description must be at least 3 characters";
+    }
+
+    setError(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Product added:", formData);
-    // Optionally reset
-    setFormData({ name: "", price: "", description: "" });
+    if (validate()) {
+      console.log(formData);
+      alert("Form submitted successfully!");
+      setFormData({
+        name: "",
+        price: "",
+        description: "",
+      });
+    } else {
+      alert("Please fix the errors");
+    }
   };
 
   return (
-    <Box sx={{ maxWidth: 500, mx: "auto", mt: 4, p: 3, border: "1px solid #ccc", borderRadius: 2 }}>
+    <Box
+      sx={{
+        maxWidth: 500,
+        mx: "auto",
+        mt: 4,
+        p: 3,
+        border: "1px solid #ccc",
+        borderRadius: 2,
+      }}
+    >
       <Typography variant="h5" mb={2}>
         Add New Product
       </Typography>
@@ -38,6 +82,8 @@ const Productadd = () => {
           margin="normal"
           required
         />
+        {error.name && <p style={{ color: "red" }}>{error.name}</p>}
+
         <TextField
           fullWidth
           label="Price"
@@ -48,6 +94,8 @@ const Productadd = () => {
           margin="normal"
           required
         />
+        {error.price && <p style={{ color: "red" }}>{error.price}</p>}
+
         <TextField
           fullWidth
           label="Description"
@@ -58,6 +106,8 @@ const Productadd = () => {
           rows={3}
           margin="normal"
         />
+        {error.description && <p style={{ color: "red" }}>{error.description}</p>}
+
         <Button variant="contained" type="submit" sx={{ mt: 2 }}>
           Add Product
         </Button>
