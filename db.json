@@ -1,0 +1,27 @@
+{
+  "products": [
+    {
+      "id": "0.4557353721292722",
+      "body": "grsgrfgreeg rggr",
+      "category": "electronics",
+      "price": 123,
+      "title": "fdssf",
+      "userId": 1
+    },
+    {
+      "title": "dvrsh4534",
+      "price": 5653,
+      "category": "home",
+      "body": "sryhtjut thtjjt",
+      "id": "56b4"
+    },
+    {
+      "id": "c20d",
+      "body": "mmm",
+      "category": "electronics",
+      "price": 55,
+      "title": "nn"
+    }
+  ],
+  "users": []
+}
